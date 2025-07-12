@@ -19,4 +19,4 @@ class TrackListAPIView(generics.ListCreateAPIView):
         select_related('creator').\
         prefetch_related('category', 'images').all()
     serializer_class = TrackSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]

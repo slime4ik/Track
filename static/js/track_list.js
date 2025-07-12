@@ -12,16 +12,22 @@ async function render() {
     let html = ''
     let json = await result.json()
     json.forEach(element => {
-        html += `
-        <div class="card mb-3" style="max-width: 540px;" >
-    <div class="row g-0">
+        let images = element.images
+        let imageshtml = ''
+        images.forEach(element => {
+            imageshtml += `
         <div class="col-md-4">
             <img
-                src="Image Source"
+                src="${element.image}"
                 class="img-fluid rounded-start"
                 alt="Card title"
             />
-        </div>
+        </div>`
+        })
+        html += `
+        <div class="card mb-3" style="max-width: 540px;" >
+    <div class="row g-0">
+        ${imageshtml}
         <div class="col-md-8">
             <div class="card-body">
                 <h5 class="card-title">${element.subject}</h5>

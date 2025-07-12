@@ -26,9 +26,9 @@ class Track(BaseCreateClass):
         PRIVATE = 'PR', 'Приватный'
     subject = models.CharField(max_length=300)
     description = models.CharField(max_length=3000)
-    category = models.ForeignKey(TrackCategory,
-                                 related_name='tracks',
-                                 on_delete=models.DO_NOTHING)
+    category = models.ManyToManyField(TrackCategory,
+                                 related_name='tracks',)
+                                #  on_delete=models.DO_NOTHING)
     privacy = models.CharField(max_length=2,
                                choices=Privacy.choices,
                                default=Privacy.PUBLIC)

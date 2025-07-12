@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block js %}<script src={% static "js/track_create.js" %}></script>{% endblock %}
+
+{%block title %}Создание трека{% endblock %}
+
+{% block content %}
+<form id="track-form" enctype="multipart/form-data">
+  {% csrf_token %}
+  
+  <input type="text" name="subject" class="form-control" placeholder="Тема" required>
+
+  <textarea name="description" class="form-control" placeholder="Описание" rows="4" required></textarea>
+
+  <select name="category" class="form-select" required>
+    {% for cat in categories %}
+      <option value="{{ cat.id }}">{{ cat.name }}</option>
+    {% endfor %}
+  </select>
+
+  <select name="privacy" class="form-select" required>
+    <option value="PB">Публичный</option>
+    <option value="PR">Приватный</option>
+  </select>
+
+  <label>
+    <input type="checkbox" name="completed"> Завершён
+  </label>
+
+  <input type="file" name="images" accept="image/*" multiple>
+
+  <button type="submit" class="btn btn-primary">Создать</button>
+</form>
+
+{% endblock %}
