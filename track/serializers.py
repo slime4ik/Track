@@ -6,7 +6,6 @@ from track.models import (
     TrackCommentImage,
     TrackCategory
 )
-
 class TrackImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrackImage
