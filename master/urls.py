@@ -26,8 +26,8 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('track.api_urls'), name='track_api'),
-    path('api/', include('account.api_urls'), name='account_api'),
+    path('api/', include('track.urls'), name='track_api'),
+    # path('api/', include('account.urls'), name='account_api'), # как будут urls раскомитить
     path('', include('track.urls'), name='track'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -40,4 +40,3 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # TODO: если пользователь не имеет JWT access redirect http://127.0.0.1:8000/api/token/, а если чо сам на refresh редиректнит не парься гепард,
-# TODO: 
