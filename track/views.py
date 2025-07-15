@@ -25,17 +25,25 @@ from track.serializers import TrackSerializer, TrackAnswerSerializer, AnswerComm
 # Пагинация
 from track.pagination import TrackListPagination, AnswerListPagination, AnswerCommentPagination
 from rest_framework.pagination import PageNumberPagination
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Count
+from django.contrib.postgres.aggregates import ArrayAgg
 from account.models import User
 from django.conf import settings
 from django.core.cache import cache
 
 # Апи для отображения публичных треков и создания своих
 class TrackListAPIView(generics.ListCreateAPIView):
-    queryset = Track.objects.select_related('creator').prefetch_related(
-        Prefetch('category', queryset=TrackCategory.objects.only('name')),
-        Prefetch('images', queryset=TrackImage.objects.only('image', 'track_id')),
-        Prefetch('likes', queryset=User.objects.only('id', 'username')))
+    queryset = (
+        Track.objects
+        .annotate(
+            total_likes_count=Count('likes'),
+            category_names=ArrayAgg('category__name', distinct=True),
+        )
+        .select_related('creator')
+        .prefetch_related(
+            Prefetch('images', queryset=TrackImage.objects.only('track_id', 'image')),
+        )
+    )
     serializer_class = TrackSerializer
     permission_classes = [IsAuthenticatedOrReadOnly] # Разрешаем всем get, а post авторизированым
     filterset_class = TracksFilterBackend
