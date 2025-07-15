@@ -1,9 +1,10 @@
 import "./HeaderItem.css"
+import {motion} from "framer-motion";
 
 export default function HeaderItem({ children, ...props }) {
     return (
-        <div className="header_item" {...props}>
+        <motion.div className="header_item" {...props}>
             {children}
-        </div>
+        </motion.div>
     )
 }

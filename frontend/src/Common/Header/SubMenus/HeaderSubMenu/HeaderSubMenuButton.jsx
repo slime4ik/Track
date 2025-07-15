@@ -1,5 +1,7 @@
+import {motion} from "framer-motion";
+
 export default function HeaderSubMenuButton({children, ...props}) {
     return (
-        <button {...props}>{children}</button>
+        <motion.button {...props}>{children}</motion.button>
     )
 }

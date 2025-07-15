@@ -2,13 +2,14 @@ import HeaderItem from "./HeaderItem";
 import HeaderSubMenuItem from "./SubMenus/HeaderSubMenu/HeaderSubMenuItem.jsx";
 import HeaderSubMenuContent from "./SubMenus/HeaderSubMenu/HeaderSubMenuContent.jsx";
 import HeaderSubMenuButton from "./SubMenus/HeaderSubMenu/HeaderSubMenuButton.jsx";
+import {motion} from "framer-motion";
 import "./Header.css"
 
 export default function Header({children = null, ...props}) {
     return (
-        <header {...props}>
+        <motion.header {...props}>
             {children}
-        </header>
+        </motion.header>
     )
 }
 

@@ -7,7 +7,7 @@
 }
 
 .main_header_sub_content {
-    display: none;
+    display: flex;
 
     position: absolute;
     left: 50%;
@@ -19,10 +19,6 @@
 
     border-radius: 0 0 1em 1em;
     background: cornflowerblue;
-}
-
-.main_header_sub_content.opened {
-    display: block;
 }
 
 #main_header {

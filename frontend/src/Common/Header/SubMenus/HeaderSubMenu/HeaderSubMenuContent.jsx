@@ -1,7 +1,9 @@
+import {motion} from "framer-motion";
+
 export default function HeaderSubMenuContent({children, ...props}) {
     return (
-        <div {...props}>
+        <motion.div {...props}>
             {children}
-        </div>
+        </motion.div>
     )
 }
