@@ -1,0 +1,44 @@
+:root {
+    --main-header-height: 4rem;
+}
+
+.main_header_sub_button {
+
+}
+
+.main_header_sub_content {
+    display: none;
+
+    position: absolute;
+    left: 50%;
+    top: var(--main-header-height);
+    transform: translateX(-50%);
+
+    width: 70%;
+    min-height: 500%;
+
+    border-radius: 0 0 1em 1em;
+    background: cornflowerblue;
+}
+
+.main_header_sub_content.opened {
+    display: block;
+}
+
+#main_header {
+    width: 100%;
+    height: var(--main-header-height);
+    background: black;
+    color: white;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+}
+
+.main_header_item {
+    margin: 0 1em;
+}
