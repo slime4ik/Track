@@ -1,7 +1,10 @@
 from django.urls import path
-from track.views import TrackListAPIView
+from track.views import TrackListAPIView, TrackAnswersAPIView, AnswerCommentAPIView, HomePageAPIView
 
 
 urlpatterns = [
-    path('tracks/', TrackListAPIView.as_view(), name='tracks')
+    path('tracks/', TrackListAPIView.as_view(), name='tracks'),
+    path('answers/<uuid:track_id>/', TrackAnswersAPIView.as_view(), name='track_answers'),
+    path('comments/<uuid:answer_id>/', AnswerCommentAPIView.as_view(), name='answer_comments'),
+    path('home/', HomePageAPIView.as_view(), name='home')
 ]
