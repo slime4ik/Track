@@ -1,14 +1,16 @@
 from django.contrib import admin
 from track.models import (
     Track,
-    TrackComment,
+    TrackAnswer,
     TrackImage,
-    TrackCommentImage,
-    TrackCategory
+    TrackAnswerImage,
+    TrackCategory,
+    AnswerComment
 )
 
 admin.site.register(Track)
-admin.site.register(TrackComment)
+admin.site.register(TrackAnswer)
 admin.site.register(TrackCategory)
-admin.site.register(TrackCommentImage)
+admin.site.register(TrackAnswerImage)
 admin.site.register(TrackImage)
+admin.site.register(AnswerComment)

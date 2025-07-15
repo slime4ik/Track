@@ -2,6 +2,7 @@ from django.db import models
 from uuid import uuid4
 from django.conf import settings
 
+
 class BaseCreateClass(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, 
@@ -27,8 +28,7 @@ class Track(BaseCreateClass):
     subject = models.CharField(max_length=300)
     description = models.CharField(max_length=3000)
     category = models.ManyToManyField(TrackCategory,
-                                 related_name='tracks',)
-                                #  on_delete=models.DO_NOTHING)
+                                 related_name='tracks')
     privacy = models.CharField(max_length=2,
                                choices=Privacy.choices,
                                default=Privacy.PUBLIC)
@@ -45,14 +45,33 @@ class TrackImage(models.Model):
                               related_name='images')
     image = models.ImageField(upload_to='track_images/%Y/%m/%d/')
 
-class TrackComment(BaseCreateClass):
+class TrackAnswer(BaseCreateClass):
+    track = models.ManyToManyField(Track,
+                                   related_name='answers')
     comment = models.CharField(max_length=2000)
-    answer = models.BooleanField(default=False, blank=True)
+    solution = models.BooleanField(default=False, blank=True)
     is_active = models.BooleanField(default=True,
                                     blank=True)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                 related_name='liked_answers',
+                                 blank=True)
+    def __str__(self):
+        return self.comment[:20]
 
-class TrackCommentImage(models.Model):
-    track = models.ForeignKey(TrackComment,
+class TrackAnswerImage(models.Model):
+    answer = models.ForeignKey(TrackAnswer,
                               on_delete=models.CASCADE,
                               related_name='images')
     image = models.ImageField(upload_to='track_comment_images/%Y/%m/%d/')
+
+class AnswerComment(BaseCreateClass):
+    answer = models.ForeignKey(TrackAnswer,
+                               on_delete=models.CASCADE,
+                               related_name='comments')
+    comment = models.CharField(max_length=500)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.comment[:20]
