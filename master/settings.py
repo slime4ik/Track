@@ -16,7 +16,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+CORS_ALLOW_ALL_ORIGINS = True
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -48,9 +48,11 @@ INSTALLED_APPS = [
     'drf_spectacular', # Удалить на проде 
     'silk', # Удалить на проде 
     'django_celery_beat', # Для периодичных задач
+    'corsheaders' # Для удаления ёб***** CORS
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -101,10 +103,10 @@ EMAIL_PORT = '2525'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'track',
-        'USER': 'postgres', 
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'NAME': 'Track',
+        'USER': 'postgres',
+        'PASSWORD': 'slime123',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -112,7 +114,7 @@ DATABASES = {
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://localhost:6379/0',
+        'LOCATION': 'redis://redis:6379/0',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
