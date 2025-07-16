@@ -2,7 +2,7 @@ from rest_framework.pagination import PageNumberPagination
 
 # Для публичных треков
 class TrackListPagination(PageNumberPagination):
-    page_size = 2
+    page_size = 3 
     page_query_param = 'page'
     page_size_query_param = 'size'
     max_page_size = 20

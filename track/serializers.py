@@ -12,7 +12,12 @@ class TrackImageSerializer(serializers.ModelSerializer):
         model = TrackImage
         fields = ['image']
 class TrackSerializer(serializers.ModelSerializer):
-    category = serializers.CharField(source='category_names')
+    category = serializers.CharField(source='category_names', read_only=True)
+    category_ids = serializers.PrimaryKeyRelatedField(
+        queryset=TrackCategory.objects.all(),
+        many=True,
+        write_only=True
+    )
     created_at = serializers.DateTimeField(format='%d-%m-%Y %H:%M', read_only=True)
     edited_at = serializers.DateTimeField(format='%d-%m-%Y %H:%M', read_only=True)
     images = TrackImageSerializer(many=True, read_only=False, required=False)
@@ -27,7 +32,8 @@ class TrackSerializer(serializers.ModelSerializer):
             'edited_at',
             'subject',
             'description',
-            'category',
+            'category',       # read-only: список названий
+            'category_ids',   # write-only: список id-шников
             'privacy',
             'completed',
             'total_likes',
@@ -45,9 +51,15 @@ class TrackSerializer(serializers.ModelSerializer):
     #     return [img.image.url for img in obj.images.all()]
 
     def create(self, validated_data):
-        # Автоматически подставляем текущего пользователя как создателя
-        validated_data['creator'] = self.context['request'].user
-        return super().create(validated_data)
+        categories = validated_data.pop('category_ids', [])
+        images_data = validated_data.pop('images', [])
+        track = Track.objects.create(creator=self.context['request'].user, **validated_data)
+        track.category.set(categories)
+
+        for img_data in images_data:
+            TrackImage.objects.create(track=track, **img_data)
+
+        return track
 
 class TrackAnswerImageSerializer(serializers.ModelSerializer):
     class Meta:

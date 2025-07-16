@@ -43,7 +43,7 @@ class TrackListAPIView(generics.ListCreateAPIView):
         .prefetch_related(
             Prefetch('images', queryset=TrackImage.objects.only('track_id', 'image')),
         )
-    )
+    ).order_by('-edited_at')
     serializer_class = TrackSerializer
     permission_classes = [IsAuthenticatedOrReadOnly] # Разрешаем всем get, а post авторизированым
     filterset_class = TracksFilterBackend
