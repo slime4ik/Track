@@ -3,7 +3,6 @@ from rest_framework.permissions import (
     IsAdminUser,
     AllowAny,
     IsAuthenticatedOrReadOnly,
-
 )
 from track.models import (
     Track,
@@ -20,30 +19,25 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.shortcuts import render
 from rest_framework import generics
+# Кастомные permissions
+from track.permissions import IsOwner
 # Серилизаторы
-from track.serializers import TrackSerializer, TrackAnswerSerializer, AnswerCommentSerializer, HomePageSerializer
+from track.serializers import TrackSerializer, TrackAnswerSerializer, \
+    AnswerCommentSerializer, HomePageSerializer, TrackDetailSerializer
 # Пагинация
 from track.pagination import TrackListPagination, AnswerListPagination, AnswerCommentPagination
 from rest_framework.pagination import PageNumberPagination
-from django.db.models import Prefetch, Count
-from django.contrib.postgres.aggregates import ArrayAgg
+from django.db.models import Prefetch, F
 from account.models import User
 from django.conf import settings
 from django.core.cache import cache
 
 # Апи для отображения публичных треков и создания своих
 class TrackListAPIView(generics.ListCreateAPIView):
-    queryset = (
-        Track.objects
-        .annotate(
-            total_likes_count=Count('likes'),
-            category_names=ArrayAgg('category__name', distinct=True),
-        )
-        .select_related('creator')
-        .prefetch_related(
-            Prefetch('images', queryset=TrackImage.objects.only('track_id', 'image')),
-        )
-    ).order_by('-edited_at')
+    queryset = Track.objects.select_related('creator').prefetch_related(
+        Prefetch('category', queryset=TrackCategory.objects.only('name', 'id')),
+        Prefetch('images', queryset=TrackImage.objects.only('image', 'track_id')),
+        Prefetch('likes', queryset=User.objects.only('id', 'username')))
     serializer_class = TrackSerializer
     permission_classes = [IsAuthenticatedOrReadOnly] # Разрешаем всем get, а post авторизированым
     filterset_class = TracksFilterBackend
@@ -112,3 +106,25 @@ class HomePageAPIView(generics.GenericAPIView):
         Переопределите в дочерних классах или добавьте нужные поля
         """
         return {}
+class TrackAPIView(generics.RetrieveDestroyAPIView):
+    serializer_class = TrackDetailSerializer
+    lookup_url_kwarg = 'track_id'
+
+    def get_queryset(self):
+        if self.request.method == 'DELETE':
+            # Только creator — больше ничего не нужно
+            return Track.objects.only('id', 'creator_id').select_related('creator')
+        
+        # Для GET — загружаем всё нужное для сериализатора
+        return Track.objects.select_related('creator').prefetch_related(
+            Prefetch('category', queryset=TrackCategory.objects.only('name', 'id')),
+            Prefetch('images', queryset=TrackImage.objects.only('image', 'track_id'))
+        ).annotate(
+            creator_name=F('creator__username')
+        )
+
+    def get_permissions(self):
+        self.permission_classes = [AllowAny]
+        if self.request.method == 'DELETE':
+            self.permission_classes = [IsOwner]
+        return super().get_permissions()
