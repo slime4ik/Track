@@ -7,22 +7,28 @@ from track.models import (
     TrackCategory,
     AnswerComment,
 )
+
 class TrackImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrackImage
         fields = ['image']
+
 class TrackSerializer(serializers.ModelSerializer):
-    category = serializers.CharField(source='category_names', read_only=True)
     category_ids = serializers.PrimaryKeyRelatedField(
-        queryset=TrackCategory.objects.all(),
         many=True,
-        write_only=True
+        queryset=TrackCategory.objects.all(),
+        source='category',  # связь с полем модели
+        write_only=True,
+        required=False
     )
+    # Для чтения (показываем названия)
+    category = serializers.SerializerMethodField(read_only=True)
+    total_likes = serializers.SerializerMethodField()
     created_at = serializers.DateTimeField(format='%d-%m-%Y %H:%M', read_only=True)
     edited_at = serializers.DateTimeField(format='%d-%m-%Y %H:%M', read_only=True)
     images = TrackImageSerializer(many=True, read_only=False, required=False)
-    creator = serializers.CharField(source='creator.username', read_only=True)
-    total_likes = serializers.IntegerField(source='total_likes_count', read_only=True)
+    completed = serializers.BooleanField(read_only=True)
+    creator = serializers.SerializerMethodField()
     class Meta:
         model = Track
         fields = (
@@ -32,34 +38,31 @@ class TrackSerializer(serializers.ModelSerializer):
             'edited_at',
             'subject',
             'description',
-            'category',       # read-only: список названий
-            'category_ids',   # write-only: список id-шников
+            'category_ids',  # для записи
+            'category',      # для чтения
             'privacy',
             'completed',
             'total_likes',
             'images'
         )
     
+    # Валидация
 
     # Методы
 
-    # def get_category(self, obj):
-    #     # Используем аннотацию category_names
-    #     return getattr(obj, 'category_names', [])
-    
-    # def get_images(self, obj):
-    #     return [img.image.url for img in obj.images.all()]
+    def get_category(self, obj):
+        return [category.name for category in obj.category.all()]
+
+    def get_creator(self, obj):
+        return obj.creator.username
+
+    def get_total_likes(self, obj):
+        return obj.likes.count()
 
     def create(self, validated_data):
-        categories = validated_data.pop('category_ids', [])
-        images_data = validated_data.pop('images', [])
-        track = Track.objects.create(creator=self.context['request'].user, **validated_data)
-        track.category.set(categories)
-
-        for img_data in images_data:
-            TrackImage.objects.create(track=track, **img_data)
-
-        return track
+        # Автоматически подставляем текущего пользователя как создателя
+        validated_data['creator'] = self.context['request'].user
+        return super().create(validated_data)
 
 class TrackAnswerImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -148,3 +151,31 @@ class HomePageSerializer(serializers.ModelSerializer):
         Возвращает общее количество треков в системе
         """
         return Track.objects.count()
+
+class TrackDetailSerializer(serializers.ModelSerializer):
+    images = TrackImageSerializer(many=True, read_only=False, required=False)
+    category = serializers.SerializerMethodField()
+    is_owner = serializers.SerializerMethodField()
+    creator = serializers.CharField()
+    created_at = serializers.DateTimeField(format='%d-%m-%Y %H:%M', read_only=True)
+    edited_at = serializers.DateTimeField(format='%d-%m-%Y %H:%M', read_only=True)
+
+    class Meta:
+        model = Track
+        fields = (
+            'creator',
+            'subject',
+            'description',
+            'created_at',
+            'edited_at',
+            'category',
+            'is_owner',
+            'images'
+        )
+
+    def get_category(self, obj):
+        return [c.name for c in obj.category.all()]
+
+    def get_is_owner(self, obj):
+        request = self.context.get('request')
+        return request and request.user == obj.creator
