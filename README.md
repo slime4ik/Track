@@ -3,7 +3,7 @@
 ```bash
 coverage run manage.py test
 ```
-Посмотреть покрытие кода
+Посмотреть покрытие кода(после окончания тестов)
 ```bash
 coverage report -m
 ```
