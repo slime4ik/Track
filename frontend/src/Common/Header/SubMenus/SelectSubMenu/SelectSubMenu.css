@@ -1,0 +1,77 @@
+.select_sub_menu_selected, .select_sub_menu_options {
+    height: 100%;
+}
+
+.select_sub_menu_options_container {
+    position: relative;
+
+    width: 60%;
+    background: aquamarine;
+    border-radius: 0 0 1em 0;
+}
+
+.select_sub_menu_selected {
+    position: relative;
+
+    width: 40%;
+    background: blue;
+
+    border-radius: 0 0 0 1em;
+}
+
+.select_sub_menu_options_item, .select_sub_menu_selected_item {
+    margin: 0.4em 1em 0.2em 1em;
+    height: auto;
+
+    color: orange;
+}
+
+.select_sub_menu {
+    position: inherit;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    border-radius: 0 0 1em 1em;
+
+    height: 100%;
+    width: 100%;
+}
+
+.select_sub_menu_selected_search_button {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 80%;
+    background: orange;
+    border-radius: 1em;
+    padding: 0.3em;
+
+    bottom: 1em;
+}
+
+.select_sub_menu_options_buttons {
+    position: absolute;
+
+    width: 100%;
+    bottom: 1em;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.select_sub_menu_options_buttons > button, .select_sub_menu_selected_search_button {
+    width: 45%;
+
+    background: orange;
+    border-radius: 1em;
+
+    text-align: center;
+    padding: 0.3em;
+}
+
+.select_sub_menu_selected_search_button {
+    width: 80%;
+}
