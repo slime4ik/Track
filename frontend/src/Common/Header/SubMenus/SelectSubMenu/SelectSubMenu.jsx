@@ -45,7 +45,7 @@ export default function SelectSubMenu({options = []}) {
             </motion.div>
             <motion.div className="select_sub_menu_options_container">
                 <motion.div>
-                    {optionsToShow.map(option => <button layout layoutId={option} className="select_sub_menu_options_item" key={option} data-key={option} onClick={handleSelect}>{option}</button>)}
+                    {optionsToShow.map(option => <motion.button layout layoutId={option} className="select_sub_menu_options_item" key={option} data-key={option} onClick={handleSelect}>{option}</motion.button>)}
                 </motion.div>
                 <motion.div className="select_sub_menu_options_buttons">
                     <motion.button onClick={selectAll}>Select All</motion.button>
