@@ -1,8 +1,8 @@
 ## Тесты
-'''bash
+```bash
 coverage run manage.py test
-'''
+```
 ## Посмотреть покрытие кода
-'''bash
+```bash
 coverage report -m
-'''
+```
