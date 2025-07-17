@@ -92,7 +92,7 @@ class HomePageAPIView(generics.GenericAPIView):
         total_tracks = cache.get('total_tracks')
         context = {
             'categories': TrackCategory.objects.all(),
-            'total_tracks': Track.objects.count()
+            'total_tracks': total_tracks
         }
         
         # Добавляем дополнительные данные в контекст
