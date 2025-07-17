@@ -12,6 +12,7 @@ from track.models import (
     TrackCategory,
     AnswerComment
 )
+from rest_framework import status
 from rest_framework.response import Response
 # Кастомные фильтры
 from track.filters import PublicTracksFilterBackend, TracksFilterBackend
@@ -31,13 +32,13 @@ from django.db.models import Prefetch, F
 from account.models import User
 from django.conf import settings
 from django.core.cache import cache
+from rest_framework.views import APIView
 
 # Апи для отображения публичных треков и создания своих
 class TrackListAPIView(generics.ListCreateAPIView):
     queryset = Track.objects.select_related('creator').prefetch_related(
         Prefetch('category', queryset=TrackCategory.objects.only('name', 'id')),
-        Prefetch('images', queryset=TrackImage.objects.only('image', 'track_id')),
-        Prefetch('likes', queryset=User.objects.only('id', 'username')))
+        Prefetch('images', queryset=TrackImage.objects.only('image', 'track_id'))).order_by('-created_at')
     serializer_class = TrackSerializer
     permission_classes = [IsAuthenticatedOrReadOnly] # Разрешаем всем get, а post авторизированым
     filterset_class = TracksFilterBackend
@@ -106,6 +107,7 @@ class HomePageAPIView(generics.GenericAPIView):
         Переопределите в дочерних классах или добавьте нужные поля
         """
         return {}
+    
 class TrackAPIView(generics.RetrieveDestroyAPIView):
     serializer_class = TrackDetailSerializer
     lookup_url_kwarg = 'track_id'
@@ -128,3 +130,34 @@ class TrackAPIView(generics.RetrieveDestroyAPIView):
         if self.request.method == 'DELETE':
             self.permission_classes = [IsOwner]
         return super().get_permissions()
+
+class ToggleTrackLikeAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, track_id):
+        user_id = request.user.id
+        liked_users_key = f"track:{track_id}:liked_users"
+        total_likes_key = f"track:{track_id}:likes"
+
+        liked_users = set(cache.get(liked_users_key, []))  # <-- Преобразуем в set
+
+        if user_id in liked_users:
+            liked_users.remove(user_id)
+            cache.set(liked_users_key, list(liked_users))
+            cache.decr(total_likes_key)
+            liked = False
+        else:
+            liked_users.add(user_id)
+            cache.set(liked_users_key, list(liked_users))
+            if cache.get(total_likes_key) is None:
+                cache.set(total_likes_key, 1)
+            else:
+                cache.incr(total_likes_key)
+            liked = True
+
+        total_likes = cache.get(total_likes_key, 0)
+
+        return Response({
+            "liked": liked,
+            "total_likes": total_likes
+        }, status=status.HTTP_200_OK)

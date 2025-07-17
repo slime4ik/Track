@@ -7,6 +7,7 @@ from track.models import (
     TrackCategory,
     AnswerComment,
 )
+from django.core.cache import cache # Кэш
 
 class TrackImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,9 +22,9 @@ class TrackSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False
     )
+    total_likes = serializers.SerializerMethodField()
     # Для чтения (показываем названия)
     category = serializers.SerializerMethodField(read_only=True)
-    total_likes = serializers.SerializerMethodField()
     created_at = serializers.DateTimeField(format='%d-%m-%Y %H:%M', read_only=True)
     edited_at = serializers.DateTimeField(format='%d-%m-%Y %H:%M', read_only=True)
     images = TrackImageSerializer(many=True, read_only=False, required=False)
@@ -42,22 +43,22 @@ class TrackSerializer(serializers.ModelSerializer):
             'category',      # для чтения
             'privacy',
             'completed',
+            'images',
             'total_likes',
-            'images'
         )
     
     # Валидация
 
     # Методы
-
+    def get_total_likes(self, obj):
+        cache_key = f'track:{obj.id}:likes'
+        return cache.get(cache_key, 0)
+    
     def get_category(self, obj):
         return [category.name for category in obj.category.all()]
 
     def get_creator(self, obj):
         return obj.creator.username
-
-    def get_total_likes(self, obj):
-        return obj.likes.count()
 
     def create(self, validated_data):
         # Автоматически подставляем текущего пользователя как создателя
@@ -153,13 +154,14 @@ class HomePageSerializer(serializers.ModelSerializer):
         return Track.objects.count()
 
 class TrackDetailSerializer(serializers.ModelSerializer):
+    total_likes = serializers.SerializerMethodField()
     images = TrackImageSerializer(many=True, read_only=False, required=False)
     category = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
     creator = serializers.CharField()
     created_at = serializers.DateTimeField(format='%d-%m-%Y %H:%M', read_only=True)
     edited_at = serializers.DateTimeField(format='%d-%m-%Y %H:%M', read_only=True)
-
+    already_liked = serializers.SerializerMethodField()
     class Meta:
         model = Track
         fields = (
@@ -170,12 +172,28 @@ class TrackDetailSerializer(serializers.ModelSerializer):
             'edited_at',
             'category',
             'is_owner',
-            'images'
+            'images',
+            'total_likes',
+            'already_liked'
         )
 
+    def get_already_liked(self, obj):
+        request = self.context.get('request')
+        if not request or not request.user.is_authenticated:
+            return False
+        user_id = request.user.id
+        liked_users_key = f"track:{obj.pk}:liked_users"
+        liked_users = cache.get(liked_users_key, set())
+        return user_id in liked_users
+    
     def get_category(self, obj):
         return [c.name for c in obj.category.all()]
 
     def get_is_owner(self, obj):
         request = self.context.get('request')
         return request and request.user == obj.creator
+    
+    def get_total_likes(self, obj):
+        cache_key = f'track:{obj.id}:likes'
+        return cache.get(cache_key, 0)
+    

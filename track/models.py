@@ -20,7 +20,7 @@ class TrackCategory(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 class Track(BaseCreateClass):
     class Privacy(models.TextChoices):
         PUBLIC = 'PB', 'Публичный'
@@ -33,9 +33,7 @@ class Track(BaseCreateClass):
                                choices=Privacy.choices,
                                default=Privacy.PUBLIC)
     completed = models.BooleanField(default=False, blank=True)
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                 related_name='liked_tracks',
-                                 blank=True)
+
     def __str__(self):
         return self.subject
     
@@ -52,9 +50,6 @@ class TrackAnswer(BaseCreateClass):
     solution = models.BooleanField(default=False, blank=True)
     is_active = models.BooleanField(default=True,
                                     blank=True)
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                 related_name='liked_answers',
-                                 blank=True)
     def __str__(self):
         return self.comment[:20]
 
