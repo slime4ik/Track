@@ -7,10 +7,12 @@ click==8.2.1
 click-didyoumean==0.3.1
 click-plugins==1.1.1.2
 click-repl==0.3.0
+coverage==7.9.2
 cron-descriptor==1.4.5
 Django==5.2.4
 django-celery-beat==2.8.1
 django-filter==25.1
+django-ratelimit==4.1.0
 django-redis==6.0.0
 django-silk==5.4.0
 django-timezone-field==7.1
