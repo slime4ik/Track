@@ -77,7 +77,7 @@ class TrackListTestCase(TestCase):
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
         subjects = [track['subject'] for track in data['results']]
-        # Проверяем нит ли треков с 1ой страницы
+        # Проверяем нит ли треков с 1ой страницы order_by('-created_at')
         assert 'Subject1' in subjects
         assert 'Subject12' not in subjects
         assert 'Subject123' not in subjects
