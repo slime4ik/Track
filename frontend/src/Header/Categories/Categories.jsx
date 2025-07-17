@@ -48,14 +48,14 @@ export default function Categories() {
     const location = useLocation()
 
     return <div id="categories_submenu">
-        <button id="categories_button" onClick={toggleCategories}>Cats</button>
+        <button id="categories_button" onClick={toggleCategories}>Коты</button>
         <div id="categories_content" style={{display: isCategoriesOpen ? "flex" : "none"}}>
             <div id="categories_selected">
                 <div id="categories_selected_list">
                     {selectedCategories.map(category => <button onClick={deselectCategory} key={category} className="main_header_categories_selected_category">{category}</button>)}
                 </div>
                 <div id="categories_selected_buttons">
-                    {!location.pathname.startsWith("/tracks") && <NavLink to={"/tracks?" + searchParams.toString()} id="categories_search_button" className="categories_selected_button">Search</NavLink>}
+                    {!location.pathname.startsWith("/tracks") && <NavLink to={"/tracks?" + searchParams.toString()} id="categories_search_button" className="categories_selected_button">Поиск</NavLink>}
                 </div>
             </div>
             <div id="categories_options">
@@ -63,8 +63,8 @@ export default function Categories() {
                     {options.map(category => <button key={category} className="main_header_categories_category" onClick={selectCategory}>{category}</button>)}
                 </div>
                 <div id="categories_options_buttons">
-                    <button onClick={selectAllCategories} className="categories_selected_button" id="categories_select_all_button">Select All</button>
-                    <button onClick={deselectAllCategories} className="categories_selected_button" id="categories_deselect_all_button">Deselect All</button>
+                    <button onClick={selectAllCategories} className="categories_selected_button" id="categories_select_all_button">Выбрать Всё</button>
+                    <button onClick={deselectAllCategories} className="categories_selected_button" id="categories_deselect_all_button">!Выбрать Всё</button>
                 </div>
             </div>
         </div>

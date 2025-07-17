@@ -6,7 +6,7 @@ export function Header() {
     return (
         <nav id="main_header">
             <div className="main_header_item">
-                <NavLink to="/">Home</NavLink>
+                <NavLink to="/">Дом</NavLink>
             </div>
             <div className="main_header_item">
                 <Categories />
