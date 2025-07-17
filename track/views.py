@@ -139,7 +139,7 @@ class ToggleTrackLikeAPIView(APIView):
         liked_users_key = f"track:{track_id}:liked_users"
         total_likes_key = f"track:{track_id}:likes"
 
-        liked_users = set(cache.get(liked_users_key, []))  # <-- Преобразуем в set
+        liked_users = set(cache.get(liked_users_key, []))
 
         if user_id in liked_users:
             liked_users.remove(user_id)
