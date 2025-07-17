@@ -1,4 +1,4 @@
-import HeaderItem from "./HeaderItem";
+import HeaderItem from "./HeaderItem.jsx";
 import HeaderSubMenuItem from "./SubMenus/HeaderSubMenu/HeaderSubMenuItem.jsx";
 import HeaderSubMenuContent from "./SubMenus/HeaderSubMenu/HeaderSubMenuContent.jsx";
 import HeaderSubMenuButton from "./SubMenus/HeaderSubMenu/HeaderSubMenuButton.jsx";
