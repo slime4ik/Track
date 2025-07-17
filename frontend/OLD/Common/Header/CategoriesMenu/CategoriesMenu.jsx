@@ -2,7 +2,7 @@ import "./CategoriesMenu.css";
 import Header from "../Header.jsx";
 import { useEffect, useState } from "react";
 import useFetch from "../../Hooks/useFetch.jsx";
-import SelectSubMenu from "../SubMenus/SelectSubMenu/SelectSubMenu.jsx";
+import CategoriesSelectSubMenu from "../SubMenus/SelectSubMenu/CategoriesSelectSubMenu.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 
 const SubMenuContent = motion(Header.SubMenuContent);
@@ -33,7 +33,7 @@ export default function CategoriesMenu() {
             exit={{ opacity: 0, y: [-10, -30, -70, -130, -200, -300, -500], transition: { duration: 0.5 } }}
             className="main_header_sub_content"
           >
-            <SelectSubMenu
+            <CategoriesSelectSubMenu
               options={fetchState.categories.map(cat => cat.name)}
             />
           </SubMenuContent>

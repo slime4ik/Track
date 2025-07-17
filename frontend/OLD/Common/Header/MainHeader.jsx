@@ -14,6 +14,9 @@ export default function MainHeader() {
                   <Header.Item key="categories" id="main_header_categories" className="main_header_item">
                         <CategoriesMenu />
                   </Header.Item>
+                  <Header.Item key="tracks" id="main_header_categories" className="main_header_item">
+                        <NavLink to="/tracks">SEARCH</NavLink>
+                  </Header.Item>
             </Header>
         </AnimatePresence>
     )
