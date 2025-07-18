@@ -57,7 +57,7 @@ class TrackSerializer(serializers.ModelSerializer):
     def get_category(self, obj):
         return [category.name for category in obj.category.all()]
 
-    def get_creator(self, obj):
+    def get_creator(self, obj) -> str:
         return obj.creator.username
 
     def create(self, validated_data):
