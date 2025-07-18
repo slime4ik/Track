@@ -133,7 +133,8 @@ class TrackAPIView(generics.RetrieveDestroyAPIView):
 
 class ToggleTrackLikeAPIView(APIView):
     permission_classes = [IsAuthenticated]
-
+    serializer_class = None
+    
     def post(self, request, track_id):
         user_id = request.user.id
         liked_users_key = f"track:{track_id}:liked_users"
