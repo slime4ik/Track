@@ -1,6 +1,6 @@
 import './App.css'
 import {RouterProvider, createBrowserRouter, NavLink} from 'react-router-dom'
-import Home from "./Home/Home.jsx";
+import Home from "./Components/Home/Home.jsx";
 import useFetch from "./Hooks/useFetch.jsx";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";

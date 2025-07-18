@@ -9,6 +9,7 @@ export default function useFetch(url, successfulCallback, errorCallback, request
 
         if (!response.ok) {
             errorCallback(json);
+            return
         }
 
         successfulCallback(json)

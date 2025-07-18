@@ -1,6 +1,6 @@
 import {Header} from "../Header/Header.jsx";
 import "./RegistrationPage.css"
-import {Form, useNavigation} from "react-router-dom";
+import {Form, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import useFetch from "../../Hooks/useFetch.jsx";
 import Cookies from 'universal-cookie';
@@ -9,7 +9,7 @@ export default function RegistrationPage() {
     const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
     const [error, setError] = useState(null)
-    const navigation = useNavigation();
+    const navigate = useNavigate();
 
     function handleSuccessfulRegistration(json) {
         const cookies = new Cookies(null, { path: '/' });
@@ -20,7 +20,7 @@ export default function RegistrationPage() {
             setError({message: "Не удалось установить куки"})
         }
 
-        navigation.location.assign("/enter_code")
+        navigate("enter_code")
     }
 
     function handleError(jsonError) {

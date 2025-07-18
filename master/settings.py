@@ -194,7 +194,34 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 5
+    'PAGE_SIZE': 5,
+    "NON_FIELD_ERRORS_KEY": "ошибка",
+    "ERROR_MESSAGES": {
+        # Общие ошибки
+        "invalid": "Некорректное значение.",
+        "required": "Обязательное поле.",
+        "blank": "Поле не может быть пустым.",
+        "null": "Поле не может быть null.",
+        # Числовые поля
+        "max_value": "Значение должно быть не более {max_value}.",
+        "min_value": "Значение должно быть не менее {min_value}.",
+        # Строковые поля
+        "max_length": "Длина должна быть не более {max_length} символов.",
+        "min_length": "Длина должна быть не менее {min_length} символов.",
+        # EmailField
+        "invalid_email": "Введите корректный email.",
+        # ChoiceField
+        "invalid_choice": "Недопустимый выбор. Допустимые значения: {choices}.",
+        # DateTimeField
+        "invalid_datetime": "Некорректная дата/время.",
+        # FileField, ImageField
+        "empty": "Файл не может быть пустым.",
+        "invalid_image": "Загрузите корректное изображение.",
+        # RegexField
+        "invalid_regex": "Значение не соответствует формату.",
+        # UniqueValidator
+        "unique": "Это значение уже занято.",
+    },
 }
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
