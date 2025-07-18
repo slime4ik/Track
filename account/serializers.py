@@ -29,7 +29,7 @@ class EmailCodeSerializer(serializers.Serializer):
 class UsernameEmailSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
-
+    
     def validate(self, data):
         # Проверка на существования аккаунта с таким email и username
         if User.objects.filter(email=data['email']).exists():

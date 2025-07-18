@@ -3,7 +3,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 @shared_task
-def send_code_to_email(email: str, code: str) -> None:
+def send_code_to_email(email: str, code: int) -> None:
+    print(f' КОД ==============================={code}')
     subject = "Обнаружен вход"
     message = (
         f"Ваш код подтверждения: {code}\n\n"
