@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Header } from "../Header/Header.jsx";
 import TrackList from "./Main/TrackList.jsx";
-import useFetch from "../Hooks/useFetch.jsx";
+import useFetch from "../../Hooks/useFetch.jsx";
 
 
 export default function Tracks() {

@@ -11,6 +11,9 @@ export function Header() {
             <div className="main_header_item">
                 <Categories />
             </div>
+            <div className="main_header_item">
+                <NavLink to="/registration">Регистрация</NavLink>
+            </div>
         </nav>
     )
 }

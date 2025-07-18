@@ -5,6 +5,7 @@ export default function useFetch(url, setFetchData, requestExtraParameters = {})
         if (!response.ok) {
             throw new Response("Failed to fetch json", {
                 status: response.status,
+                statusText: response.statusText,
             })
         }
 
@@ -13,6 +14,7 @@ export default function useFetch(url, setFetchData, requestExtraParameters = {})
         if (!json) {
             throw new Response("Failed to load json", {
                 status: response.status,
+                statusText: response.statusText,
             })
         }
 
