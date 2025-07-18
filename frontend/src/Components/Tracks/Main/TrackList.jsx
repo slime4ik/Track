@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useInView} from "react-intersection-observer";
 import "./TrackList.css"
-import ScaledImages from "../../Common/ScaledImages/ScaledImages.jsx";
+import ScaledImages from "../../../Common/ScaledImages/ScaledImages.jsx";
 
 const MAX_DESCRIPTION_LENGTH_CLOSED = 250
 
