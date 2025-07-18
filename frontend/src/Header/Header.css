@@ -1,0 +1,12 @@
+#main_header {
+    background: black;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.main_header_item {
+    padding: 0.5em 1em;
+}

@@ -118,10 +118,10 @@ EMAIL_PORT = '2525'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'track',
-        'USER': 'postgres', 
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'NAME': 'Track',
+        'USER': 'postgres',
+        'PASSWORD': 'slime123',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -129,7 +129,7 @@ DATABASES = {
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://localhost:6379/0',
+        'LOCATION': 'redis://redis:6379/0',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
