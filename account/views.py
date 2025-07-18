@@ -34,7 +34,7 @@ class RegistrationEmailAPIView(GenericAPIView):
             reg_token = str(uuid.uuid4())
             cache.set(f'reg:{reg_token}', {'email': email, 'username': username}, timeout=900)  # 15 минут
             
-            send_code_to_email.delay(email, code)
+            # send_code_to_email.delay(email, code)
             return Response({
                 'message': 'Код отправлен на почту',
                 'reg_token': reg_token
