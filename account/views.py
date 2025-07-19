@@ -80,6 +80,8 @@ class RegistrationPasswordAPIView(GenericAPIView):
             refresh = RefreshToken.for_user(user)
             response = Response({
                 'message': 'Аккаунт создан!',
+                'user_id': user.id,
+                'username': user.username
             }, status=status.HTTP_201_CREATED)
 
             response.set_cookie(
