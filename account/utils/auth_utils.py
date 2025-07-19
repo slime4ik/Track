@@ -1,12 +1,11 @@
 import random
 import string
 from django.core.cache import cache
-from django.core.mail import send_mail
 
 EMAIL_CODE_TTL = 60 * 10
 
-def generate_code(length: int = 6) -> int:
-    return int(''.join(random.choices(string.digits, k=length)))
+def generate_code(length: int = 6) -> str:
+    return (''.join(random.choices(string.digits, k=length)))
 
 def set_code_in_redis(email: str) -> str:
     code = generate_code()

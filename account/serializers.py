@@ -4,7 +4,7 @@ from account.models import User
 
 class PasswordSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
-
+    
     class Meta:
         model = User
         fields = ('password', 'password2')

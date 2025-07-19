@@ -23,14 +23,16 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
+from account.views import CustomTokenRefreshView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('track.urls'), name='track_api'),
     path('api/', include('account.urls'), name='account_api'),
+    # OAUTH 2.0
+    # path('social-auth/', include('social_django.urls', namespace='social')), # Сделаем как будем хостить
     # path('', include('track.urls'), name='track'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
