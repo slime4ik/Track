@@ -118,10 +118,10 @@ EMAIL_PORT = '2525'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'track',
-        'USER': 'postgres', 
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'NAME': 'Track',
+        'USER': 'postgres',
+        'PASSWORD': 'slime123',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -129,7 +129,7 @@ DATABASES = {
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://localhost:6379/0',
+        'LOCATION': 'redis://redis:6379/0',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
@@ -202,6 +202,10 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,  # Новый refresh при каждом обновлении
     'BLACKLIST_AFTER_ROTATION': True,  # Старые refresh больше не работают
 }
+JWT_COOKIE_SECURE = False if DEBUG else True
+JWT_COOKIE_HTTPONLY = True
+JWT_COOKIE_SAMESITE = 'Lax'
+
 # Чтобы красиво нам с гепардом было <3
 SPECTACULAR_SETTINGS = {
     'TITLE': 'E-Commerce API',

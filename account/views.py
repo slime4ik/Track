@@ -208,3 +208,4 @@ class CustomTokenRefreshView(TokenRefreshView):
             )
             del response.data['access']  # Убираем из тела ответа
         return response
+

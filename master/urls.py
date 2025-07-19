@@ -26,21 +26,21 @@ from rest_framework_simplejwt.views import (
 from account.views import CustomTokenRefreshView
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # Треки
     path('api/', include('track.urls'), name='track_api'),
+    # Авторизация
     path('api/', include('account.urls'), name='account_api'),
     # OAUTH 2.0
     # path('social-auth/', include('social_django.urls', namespace='social')), # Сделаем как будем хостить
-    # path('', include('track.urls'), name='track'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
+    # Schema
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    # Optional UI:
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    # silk Для проверки SQL запросов
     path('silk/', include('silk.urls', namespace='silk')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-# TODO: если пользователь не имеет JWT access redirect http://127.0.0.1:8000/api/token/, а если чо сам на refresh редиректнит не парься гепард,
