@@ -202,7 +202,7 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,  # Новый refresh при каждом обновлении
     'BLACKLIST_AFTER_ROTATION': True,  # Старые refresh больше не работают
 }
-JWT_COOKIE_SECURE = False if DEBUG else True
+JWT_COOKIE_SECURE = not DEBUG
 JWT_COOKIE_HTTPONLY = True
 JWT_COOKIE_SAMESITE = 'Lax'
 
