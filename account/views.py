@@ -91,7 +91,7 @@ class RegistrationPasswordAPIView(GenericAPIView):
                 max_age=7 * 24 * 3600
             )
             response.set_cookie(
-                key='refresh_token',
+                key='access_token',
                 value=str(refresh.access_token),
                 httponly=True,
                 secure=True,
