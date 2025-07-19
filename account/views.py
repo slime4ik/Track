@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from drf_spectacular.utils import extend_schema
 import uuid
-
+from rest_framework_simplejwt.views import TokenRefreshView
 from account.serializers import (
     UsernameEmailSerializer, EmailCodeSerializer,
     PasswordSerializer, UsernamePasswordSerializer
@@ -94,7 +94,6 @@ class RegistrationPasswordAPIView(GenericAPIView):
             return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 # Вход — логин + пароль
 class LoginAPIView(GenericAPIView):
     serializer_class = UsernamePasswordSerializer
@@ -139,16 +138,26 @@ class LoginCodeAPIView(GenericAPIView):
 
             response = Response({
                 'message': 'Успешный вход!',
-                'access': str(refresh.access_token)
+                'user_id': user.id,
+                'username': user.username
             }, status=status.HTTP_200_OK)
 
+            response.set_cookie(
+                key='access_token',
+                value=str(refresh.access_token),
+                httponly=True,
+                secure=True,
+                samesite='Lax',
+                max_age= 60 * 15  # 15 минут
+            )
+            
             response.set_cookie(
                 key='refresh_token',
                 value=str(refresh),
                 httponly=True,
                 secure=True,
                 samesite='Lax',
-                max_age=7 * 24 * 3600
+                max_age=604800  # 7 дней
             )
             return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -181,3 +190,22 @@ class CheckAuthAPIView(GenericAPIView):
             'user_id': request.user.id,
             'username': request.user.username
         })
+
+# Кастомная выдача access токена
+class CustomTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        refresh_token = request.COOKIES.get('refresh_token')
+        
+        if response.status_code == 200 and refresh_token:
+            response.set_cookie(
+                key='access_token',
+                value=response.data['access'],
+                httponly=True,
+                secure=True,
+                samesite='Lax',
+                max_age=60 * 15  # 15 минут (как срок жизни access token)
+            )
+            del response.data['access']  # Убираем из тела ответа
+        return response
+
